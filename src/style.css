@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
+
 :root {
   /* Paleta de marca Ned's Bayou */
   --brand-aqua: #0cc0df;    /* Azul aqua */
@@ -6,12 +8,13 @@
   --brand-white: #ffffff;
   --brand-black: #000000;
 
-  --bg: var(--brand-black);
-  --surface: #121212;
-  --surface-2: #1c1c1c;
-  --border: #2c2c2c;
-  --text: var(--brand-white);
-  --muted: #9a9a9a;
+  --bg-start: #ffffff;
+  --bg-end: #d6f4fa;
+  --surface: #ffffff;
+  --surface-2: #eafbfd;
+  --border: #b9e8f0;
+  --text: #0a1418;
+  --muted: #55707a;
   --accent: var(--brand-aqua);
   --accent-hover: var(--brand-blue);
   --danger: var(--brand-red);
@@ -23,8 +26,12 @@
 
 body {
   margin: 0;
-  background: var(--bg);
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 100%);
+  background-attachment: fixed;
   color: var(--text);
+  font-family: "Anton", "Segoe UI", system-ui, sans-serif;
+  letter-spacing: 0.3px;
 }
 
 #app { min-height: 100vh; }
@@ -35,13 +42,13 @@ body {
   align-items: center;
   padding: 14px 24px;
   background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--brand-aqua);
   flex-wrap: wrap;
   gap: 12px;
 }
 
 .brand { display: flex; align-items: center; }
-.brand-logo { height: 42px; width: auto; display: block; }
+.brand-logo { height: 64px; width: auto; display: block; }
 
 .nav-links {
   display: flex;
@@ -60,45 +67,132 @@ body {
   font-size: 0.9rem;
 }
 
-.nav-link:hover { border-color: var(--brand-aqua); color: var(--brand-aqua); }
-.nav-link.active { background: var(--brand-blue); border-color: var(--brand-blue); color: var(--brand-black); font-weight: 700; }
+.nav-link:hover { border-color: var(--brand-red); color: var(--brand-red); background: var(--surface-2); }
+.nav-link.active { background: var(--brand-red); border-color: var(--brand-red); color: var(--brand-white); font-weight: 700; }
 
 .nav-user { color: var(--muted); font-size: 0.9rem; padding: 0 6px; }
 
+.nav-link[data-nav="login"],
+.nav-link[data-nav="register"] {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  letter-spacing: normal;
+}
+
 .container { max-width: 1000px; margin: 0 auto; padding: 24px; }
 
-h2 { margin-top: 0; }
+h2 { margin-top: 0; color: var(--text); }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+.sub-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 3px solid var(--brand-black);
+}
+
+.sub-row {
+  display: flex;
+  align-items: center;
   gap: 18px;
+  padding: 18px 6px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s ease;
 }
 
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px;
+.sub-row:hover { background: var(--surface-2); }
+
+.sub-code {
+  font-family: "Courier New", monospace;
+  font-size: 0.8rem;
+  color: var(--muted);
+  width: 46px;
+  flex-shrink: 0;
+}
+
+.sub-row:nth-child(4n+1) .sub-code { color: var(--brand-aqua); }
+.sub-row:nth-child(4n+2) .sub-code { color: var(--brand-blue); }
+.sub-row:nth-child(4n+3) .sub-code { color: var(--brand-red); }
+.sub-row:nth-child(4n+4) .sub-code { color: var(--brand-black); font-weight: 700; }
+
+.sub-info { flex: 1; min-width: 140px; }
+.sub-info h3 { font-size: 1.3rem; margin: 0; letter-spacing: 0.5px; }
+.sub-price { color: var(--brand-blue); font-weight: 700; margin: 2px 0 0; font-family: "Segoe UI", system-ui, sans-serif; }
+.sub-per { color: var(--muted); font-weight: 400; font-size: 0.8rem; }
+
+.sub-cupos {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 0.8rem;
+  color: var(--muted);
+  width: 80px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.sub-hint { width: 110px; text-align: right; font-family: "Segoe UI", system-ui, sans-serif; }
+
+.sub-stamp {
+  background: var(--brand-red);
+  border: 2px solid var(--brand-black);
+  border-radius: 3px;
+  transform: rotate(-2deg);
+  flex-shrink: 0;
+}
+
+.sub-stamp:hover { transform: rotate(0deg); background: var(--brand-blue); }
+.sub-stamp:disabled { transform: none; }
+
+.site-footer {
+  margin-top: 40px;
+  background: var(--brand-black);
+  border-top: 3px solid var(--brand-red);
+  color: var(--brand-white);
+  padding: 28px 24px 16px;
+}
+
+.footer-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.footer-brand { font-size: 1.1rem; color: var(--brand-aqua); }
+
+.footer-links { display: flex; gap: 18px; flex-wrap: wrap; font-family: "Segoe UI", system-ui, sans-serif; font-size: 0.85rem; }
+.footer-links a { color: var(--brand-white); text-decoration: none; }
+.footer-links a:hover { color: var(--brand-red); }
+
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: right;
+}
+
+.footer-copy {
+  max-width: 1000px;
+  margin: 18px auto 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: var(--muted);
   text-align: center;
-  transition: border-color 0.15s ease;
 }
-
-.card:hover { border-color: var(--brand-aqua); }
-
-.card img { width: 100%; border-radius: var(--radius); margin-bottom: 8px; }
-.card h3 { margin: 6px 0; font-size: 1rem; }
-.price { color: var(--accent); font-weight: 700; margin: 4px 0; }
-.stock { color: var(--muted); font-size: 0.85rem; margin: 0 0 10px; }
 
 button {
   background: var(--accent);
-  color: white;
+  color: var(--brand-white);
   border: none;
   padding: 8px 14px;
   border-radius: var(--radius);
   cursor: pointer;
   font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: inherit;
 }
 
 button:hover { background: var(--accent-hover); }
@@ -109,10 +203,14 @@ button:disabled { background: var(--surface-2); color: var(--muted); cursor: not
   margin: 40px auto;
   background: var(--surface);
   border: 1px solid var(--border);
+  border-top: 4px solid var(--brand-red);
   border-radius: var(--radius);
   padding: 24px;
+  box-shadow: 0 2px 10px rgba(12, 192, 223, 0.1);
+  font-family: "Segoe UI", system-ui, sans-serif;
 }
 
+.auth-box h2 { color: var(--brand-black); font-family: inherit; }
 .auth-box form { display: flex; flex-direction: column; gap: 8px; }
 .auth-box label { color: var(--muted); font-size: 0.85rem; margin-top: 6px; }
 
@@ -125,7 +223,7 @@ input {
   font-size: 0.95rem;
 }
 
-.auth-box button { margin-top: 12px; }
+.auth-box button { margin-top: 12px; font-family: inherit; letter-spacing: normal; }
 
 .hint { color: var(--muted); font-size: 0.85rem; }
 .error { color: var(--danger); font-size: 0.9rem; }

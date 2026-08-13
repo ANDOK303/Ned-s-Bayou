@@ -19,7 +19,7 @@ function findProduct(id: number): Product | undefined {
 
 function renderNavbar(): string {
   const links = [
-    `<button data-nav="catalog" class="nav-link ${state.view === "catalog" ? "active" : ""}">Catálogo</button>`,
+    `<button data-nav="catalog" class="nav-link ${state.view === "catalog" ? "active" : ""}">Suscripciones</button>`,
   ];
 
   if (state.currentUser) {
@@ -91,20 +91,22 @@ function renderRegister(): string {
 // ---------- CATALOG ----------
 
 function renderCatalog(): string {
-  const cards = products
+  const rows = products
     .map(
-      (p) => `
-      <div class="card">
-        <img src="${p.image}" alt="${p.name}" />
-        <h3>${p.name}</h3>
-        <p class="price">Q${p.price.toFixed(2)}</p>
-        <p class="stock">Stock: ${p.stock}</p>
+      (p, i) => `
+      <div class="sub-row">
+        <span class="sub-code">NB-0${i + 1}</span>
+        <div class="sub-info">
+          <h3>${p.name}</h3>
+          <p class="sub-price">Q${p.price.toFixed(2)}<span class="sub-per">/mes</span></p>
+        </div>
+        <span class="sub-cupos">${p.stock} cupos</span>
         ${
           state.currentUser
-            ? `<button data-add-cart="${p.id}" ${p.stock === 0 ? "disabled" : ""}>
-                ${p.stock === 0 ? "Agotado" : "Agregar al carrito"}
+            ? `<button class="sub-stamp" data-add-cart="${p.id}" ${p.stock === 0 ? "disabled" : ""}>
+                ${p.stock === 0 ? "Cupos llenos" : "Suscribirse"}
               </button>`
-            : `<p class="hint">Inicia sesión para comprar</p>`
+            : `<span class="hint sub-hint">Inicia sesión</span>`
         }
       </div>
     `
@@ -112,8 +114,8 @@ function renderCatalog(): string {
     .join("");
 
   return `
-    <h2>Catálogo</h2>
-    <div class="grid">${cards}</div>
+    <h2>Suscripciones</h2>
+    <div class="sub-list">${rows}</div>
   `;
 }
 
@@ -193,15 +195,15 @@ function renderAdmin(): string {
 
     <h3>Agregar producto</h3>
     <form id="product-form" class="inline-form">
-      <input name="name" placeholder="Nombre" required />
+      <input name="name" placeholder="Nombre de la suscripción" required />
       <input name="price" type="number" step="0.01" placeholder="Precio" required />
-      <input name="stock" type="number" placeholder="Stock" required />
+      <input name="stock" type="number" placeholder="Cupos disponibles" required />
       <button type="submit">Agregar</button>
     </form>
 
     <h3>Productos</h3>
     <table class="admin-table">
-      <thead><tr><th>ID</th><th>Nombre</th><th>Precio</th><th>Stock</th><th></th></tr></thead>
+      <thead><tr><th>ID</th><th>Nombre</th><th>Precio</th><th>Cupos</th><th></th></tr></thead>
       <tbody>${productRows}</tbody>
     </table>
 
@@ -210,6 +212,28 @@ function renderAdmin(): string {
       <thead><tr><th>ID</th><th>Usuario</th><th>Rol</th></tr></thead>
       <tbody>${userRows}</tbody>
     </table>
+  `;
+}
+
+// ---------- FOOTER (decorativo, solo en Suscripciones) ----------
+
+function renderFooter(): string {
+  return `
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">NED'S BAYOU</div>
+        <div class="footer-links">
+          <a href="#" onclick="return false">★★★★★ Calificanos</a>
+          <a href="#" onclick="return false">Instagram</a>
+          <a href="#" onclick="return false">Facebook</a>
+        </div>
+        <div class="footer-contact">
+          <span>+502 4417-8823</span>
+          <span>contacto@nedsbayou.com</span>
+        </div>
+      </div>
+      <p class="footer-copy">© ${new Date().getFullYear()} Ned's Bayou Records. Todos los derechos reservados.</p>
+    </footer>
   `;
 }
 
@@ -235,6 +259,7 @@ function render() {
   app.innerHTML = `
     ${renderNavbar()}
     <main class="container">${renderView()}</main>
+    ${state.view === "catalog" ? renderFooter() : ""}
   `;
   attachEvents();
 }
@@ -349,7 +374,7 @@ function attachEvents() {
       name,
       price,
       stock,
-      image: `https://placehold.co/300x300?text=${encodeURIComponent(name)}`,
+      image: "",
     });
     render();
   });
