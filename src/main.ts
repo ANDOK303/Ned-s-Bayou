@@ -44,7 +44,7 @@ function renderNavbar(): string {
 
   return `
     <nav class="navbar">
-      <div class="brand">🛒 Tienda Demo</div>
+      <div class="brand"><img src="${import.meta.env.BASE_URL}logo.png" alt="Ned's Bayou" class="brand-logo" /></div>
       <div class="nav-links">${links.join("")}</div>
     </nav>
   `;

@@ -1,13 +1,20 @@
 :root {
-  --bg: #0f1115;
-  --surface: #181b22;
-  --surface-2: #21252e;
-  --border: #2b303b;
-  --text: #eaecef;
-  --muted: #9aa1ac;
-  --accent: #4f7cff;
-  --accent-hover: #6c93ff;
-  --danger: #ff5c5c;
+  /* Paleta de marca Ned's Bayou */
+  --brand-aqua: #0cc0df;    /* Azul aqua */
+  --brand-blue: #38b6ff;    /* Azul celeste */
+  --brand-red: #f40909;     /* Rojo vívido */
+  --brand-white: #ffffff;
+  --brand-black: #000000;
+
+  --bg: var(--brand-black);
+  --surface: #121212;
+  --surface-2: #1c1c1c;
+  --border: #2c2c2c;
+  --text: var(--brand-white);
+  --muted: #9a9a9a;
+  --accent: var(--brand-aqua);
+  --accent-hover: var(--brand-blue);
+  --danger: var(--brand-red);
   --radius: 10px;
   font-family: "Segoe UI", system-ui, sans-serif;
 }
@@ -33,7 +40,8 @@ body {
   gap: 12px;
 }
 
-.brand { font-weight: 700; font-size: 1.1rem; }
+.brand { display: flex; align-items: center; }
+.brand-logo { height: 42px; width: auto; display: block; }
 
 .nav-links {
   display: flex;
@@ -52,8 +60,8 @@ body {
   font-size: 0.9rem;
 }
 
-.nav-link:hover { border-color: var(--accent); }
-.nav-link.active { background: var(--accent); border-color: var(--accent); }
+.nav-link:hover { border-color: var(--brand-aqua); color: var(--brand-aqua); }
+.nav-link.active { background: var(--brand-blue); border-color: var(--brand-blue); color: var(--brand-black); font-weight: 700; }
 
 .nav-user { color: var(--muted); font-size: 0.9rem; padding: 0 6px; }
 
@@ -73,7 +81,10 @@ h2 { margin-top: 0; }
   border-radius: var(--radius);
   padding: 14px;
   text-align: center;
+  transition: border-color 0.15s ease;
 }
+
+.card:hover { border-color: var(--brand-aqua); }
 
 .card img { width: 100%; border-radius: var(--radius); margin-bottom: 8px; }
 .card h3 { margin: 6px 0; font-size: 1rem; }
@@ -122,7 +133,7 @@ input {
 table { width: 100%; border-collapse: collapse; margin-top: 12px; }
 th, td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
 
-.total { font-weight: 700; font-size: 1.1rem; margin-top: 12px; }
+.total { font-weight: 700; font-size: 1.1rem; margin-top: 12px; color: var(--brand-red); }
 
 .inline-form { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
 .inline-form input { flex: 1; min-width: 100px; }
