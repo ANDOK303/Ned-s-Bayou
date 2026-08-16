@@ -1,10 +1,17 @@
-import type { User, CartItem, View } from "./types";
+import type { User, CartItem, View, InscripcionesTab } from "./types";
 
 export const state = {
   currentUser: null as User | null,
   cart: [] as CartItem[],
-  view: "catalog" as View,
+  view: "home" as View,
   error: "" as string,
+  theme: "light" as "light" | "dark",
+
+  inscripcionesTab: "clases" as InscripcionesTab,
+  enrolledClasses: [] as number[],
+  enrolledCourses: [] as number[],
+  rsvpEvents: [] as number[],
+  appliedCastings: [] as number[],
 };
 
 export function isAdmin(): boolean {

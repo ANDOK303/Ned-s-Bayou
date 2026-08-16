@@ -3,7 +3,7 @@ export type Role = "admin" | "user";
 export interface User {
   id: number;
   username: string;
-  password: string; // demo: texto plano, no hay persistencia real
+  password: string; 
   role: Role;
 }
 
@@ -20,4 +20,18 @@ export interface CartItem {
   qty: number;
 }
 
-export type View = "login" | "register" | "catalog" | "cart" | "admin";
+export type View =
+  | "home"
+  | "login"
+  | "register"
+  | "catalog"
+  | "merch"
+  | "eventos"
+  | "inscripciones"
+  | "artistas"
+  | "disqueras"
+  | "castings"
+  | "cart"
+  | "admin";
+
+export type InscripcionesTab = "clases" | "horarios" | "cursos";
