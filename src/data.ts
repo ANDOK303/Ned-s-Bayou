@@ -111,6 +111,28 @@ export const news: NewsItem[] = [
       "Show en vivo el 5 de septiembre en La Guarida, zona 4. Preventa Q50, en taquilla Q75.",
     image: "malportados.jpg",
   },
+  {
+    id: 9,
+    artist: "Balu Brigada",
+    headline: "'Backseat' ya suma más de un millón de vistas",
+    summary:
+      "El dúo de hermanos neozelandés viene de telonear a Twenty One Pilots en su gira mundial, y este sencillo es parte de su álbum debut 'Portal'.",
+    youtubeUrl: "https://www.youtube.com/watch?v=N1D9oUSjigQ",
+  },
+  {
+    id: 10,
+    artist: "Dottie Anderson",
+    headline: "La artista sueca lanza 'I love being sad'",
+    summary:
+      "Un sencillo de indie-pop luminoso que juega con el contraste entre una producción alegre y una letra agridulce.",
+  },
+  {
+    id: 11,
+    artist: "The Sophs",
+    headline: "El sexteto de Los Ángeles debuta con 'GOLDSTAR'",
+    summary:
+      "Firmados con el sello independiente Rough Trade, construyen su álbum debut sobre la fuerza de su sencillo 'SWEETIEPIE'.",
+  },
 ];
 
 let nextUserId = users.length + 1;
