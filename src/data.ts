@@ -47,6 +47,8 @@ export interface NewsItem {
   artist: string;
   headline: string;
   summary: string;
+  image?: string; // ruta local en public/, para bandas del flyer
+  youtubeUrl?: string; // si existe, la miniatura sale directo de YouTube
 }
 
 export const news: NewsItem[] = [
@@ -84,6 +86,30 @@ export const news: NewsItem[] = [
     headline: "Explora ritmos microtonales en su nuevo sencillo doble",
     summary:
       "Tras una gira por Europa junto a King Gizzard and The Lizard Wizard, la multiinstrumentista sigue construyendo un sonido difícil de encasillar.",
+  },
+  {
+    id: 6,
+    artist: "half•alive",
+    headline: "Estrena 'The Wolf', adelanto de su nuevo EP 'Billions'",
+    summary:
+      "El video viene con la coreografía característica de la banda y explora temas del mundo corporativo. El EP completo sale el 28 de agosto vía ARRO Records.",
+    youtubeUrl: "https://www.youtube.com/watch?v=uRHIqSRb7YQ",
+  },
+  {
+    id: 7,
+    artist: "Vinotinto",
+    headline: "Rock Night Music en Búho Cósmico",
+    summary:
+      "La banda se presenta en vivo este 4 de abril en Búho Cósmico Gastro & Bar, zona 4. Entrada por consumo.",
+    image: "vinotinto.jpg",
+  },
+  {
+    id: 8,
+    artist: "Da Bom Garoto y Los Mal Portados",
+    headline: "Comparten escenario con Los Simios del Mercado",
+    summary:
+      "Show en vivo el 5 de septiembre en La Guarida, zona 4. Preventa Q50, en taquilla Q75.",
+    image: "malportados.jpg",
   },
 ];
 

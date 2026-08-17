@@ -140,15 +140,28 @@ function renderSidebar(): string {
 
 function renderHome(): string {
   const cards = news
-    .map(
-      (n) => `
-      <article class="news-card">
-        <span class="news-artist">${n.artist}</span>
-        <h3>${n.headline}</h3>
-        <p>${n.summary}</p>
-      </article>
-    `
-    )
+    .map((n) => {
+      let thumb = "";
+      if (n.youtubeUrl) {
+        const videoId = extractYoutubeId(n.youtubeUrl);
+        thumb = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : "";
+      } else if (n.image) {
+        thumb = `${import.meta.env.BASE_URL}${n.image}`;
+      }
+
+      const inner = `
+        ${thumb ? `<img src="${thumb}" alt="${n.headline}" />` : ""}
+        <div class="news-card-body">
+          <span class="news-artist">${n.artist}</span>
+          <h3>${n.headline}</h3>
+          <p>${n.summary}</p>
+        </div>
+      `;
+
+      return n.youtubeUrl
+        ? `<a class="news-card" href="${n.youtubeUrl}" target="_blank" rel="noopener noreferrer">${inner}</a>`
+        : `<article class="news-card">${inner}</article>`;
+    })
     .join("");
 
   return `
