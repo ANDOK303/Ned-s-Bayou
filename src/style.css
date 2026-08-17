@@ -138,6 +138,80 @@ body.theme-dark .auth-box h2 { color: var(--brand-white); }
 
 .content { flex: 1; min-width: 0; }
 
+.section-subtitle {
+  margin-top: 32px;
+  font-size: 1.1rem;
+  border-top: 2px solid var(--border);
+  padding-top: 20px;
+}
+
+.song-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+  padding-bottom: 24px;
+}
+
+.song-card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.song-card:hover { border-color: var(--brand-red); transform: translateY(-2px); }
+
+.song-card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+
+.song-card span {
+  display: block;
+  padding: 8px 10px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 0.82rem;
+}
+
+.event-row { align-items: center; }
+
+.event-flyers {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.event-flyer {
+  width: 80px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  cursor: zoom-in;
+  transition: transform 0.15s ease;
+}
+
+.event-flyer:hover { transform: scale(1.04); }
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
+  cursor: zoom-out;
+}
+
+.lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
 /* Listas genéricas: eventos, clases, cursos, castings */
 .list-block {
   display: flex;

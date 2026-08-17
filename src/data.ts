@@ -118,12 +118,31 @@ export interface EventItem {
   name: string;
   date: string;
   venue: string;
+  images?: string[];
 }
 
 export const events: EventItem[] = [
-  { id: 1, name: "Noche Bayou Live", date: "12 sep 2026", venue: "Casa Bran, Zona 1" },
-  { id: 2, name: "Showcase de Nuevos Talentos", date: "26 sep 2026", venue: "Centro Cultural Miguel Ángel Asturias" },
-  { id: 3, name: "Festival Neuro Expansion", date: "10 oct 2026", venue: "Parque Central" },
+  {
+    id: 1,
+    name: "Vinotinto: Rock Night Music",
+    date: "4 abr 2026 · 8:00 PM",
+    venue: "Búho Cósmico Gastro & Bar, Ruta 4 6-49 zona 4",
+    images: ["vinotinto.jpg"],
+  },
+  {
+    id: 2,
+    name: "Da Bom Garoto y Los Mal Portados + Los Simios del Mercado",
+    date: "5 sep 2026 · 7:00 PM",
+    venue: "La Guarida, Zona 4",
+    images: ["malportados.jpg", "malportados2.jpg"],
+  },
+  {
+    id: 3,
+    name: "Fiesta de la Música 2026 — El Atrio CFCE",
+    date: "Por confirmar",
+    venue: "El Atrio, CFCE",
+    images: ["fiestamusica.jpg"],
+  },
 ];
 
 // ---------- INSCRIPCIONES: clases en línea, horarios, cursos ----------
@@ -197,7 +216,27 @@ export const labels: LabelPartner[] = [
   { id: 3, name: "Raíz Sello", founded: 2016, focus: "Folk y raíces latinoamericanas" },
 ];
 
-// ---------- CASTINGS ----------
+// ---------- CANCIONES DESTACADAS (links a YouTube) ----------
+
+export interface MediaLink {
+  id: number;
+  title: string;
+  url: string;
+}
+
+export const featuredSongs: MediaLink[] = [
+  { id: 1, title: "Sencillo destacado 1", url: "https://youtu.be/euQFIVqn2JA" },
+  { id: 2, title: "Sencillo destacado 2", url: "https://youtu.be/RiSRNN_RObg" },
+  { id: 3, title: "Sencillo destacado 3", url: "https://youtu.be/qrfmW6SYhxQ" },
+  { id: 4, title: "Sencillo destacado 4", url: "https://youtu.be/9PlJeN9fLnw" },
+  { id: 5, title: "Sencillo destacado 5", url: "https://youtu.be/uzVWEr4_07M" },
+  { id: 6, title: "Sencillo destacado 6", url: "https://youtu.be/PPI9li8HsWs" },
+];
+
+let nextLinkId = featuredSongs.length + 1;
+export function getNextLinkId(): number {
+  return nextLinkId++;
+}
 
 export interface Casting {
   id: number;

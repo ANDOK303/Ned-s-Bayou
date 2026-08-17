@@ -11,8 +11,10 @@ import {
   artists,
   labels,
   castings,
+  featuredSongs,
   getNextUserId,
   getNextProductId,
+  getNextLinkId,
 } from "./data";
 import { state, isAdmin, cartCount } from "./state";
 import type { Product } from "./types";
@@ -27,6 +29,37 @@ function goTo(view: typeof state.view) {
 
 function findCatalogItem(id: number): Product | undefined {
   return products.find((p) => p.id === id) ?? merch.find((m) => m.id === id);
+}
+
+function extractYoutubeId(url: string): string | null {
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes("youtu.be")) return u.pathname.slice(1);
+    if (u.hostname.includes("youtube.com")) return u.searchParams.get("v");
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+function renderFeaturedSongs(): string {
+  const cards = featuredSongs
+    .map((song) => {
+      const videoId = extractYoutubeId(song.url);
+      const thumb = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : "";
+      return `
+        <a class="song-card" href="${song.url}" target="_blank" rel="noopener noreferrer">
+          ${thumb ? `<img src="${thumb}" alt="${song.title}" />` : ""}
+          <span>${song.title}</span>
+        </a>
+      `;
+    })
+    .join("");
+
+  return `
+    <h3 class="section-subtitle">Canciones destacadas</h3>
+    <div class="song-grid">${cards}</div>
+  `;
 }
 
 // ---------- ICONOS (SVG en línea, sin dependencias externas) ----------
@@ -122,6 +155,7 @@ function renderHome(): string {
     <h2>Novedades de la escena</h2>
     <p class="hint" style="margin-top:-8px;">Lo que están haciendo artistas independientes ahora mismo.</p>
     <div class="news-grid">${cards}</div>
+    ${renderFeaturedSongs()}
   `;
 }
 
@@ -131,8 +165,15 @@ function renderEventos(): string {
   const rows = events
     .map((ev) => {
       const reserved = state.rsvpEvents.includes(ev.id);
+      const flyers = (ev.images ?? [])
+        .map(
+          (img) =>
+            `<img class="event-flyer" src="${import.meta.env.BASE_URL}${img}" alt="${ev.name}" data-lightbox="${import.meta.env.BASE_URL}${img}" />`
+        )
+        .join("");
       return `
-        <div class="list-row">
+        <div class="list-row event-row">
+          ${flyers ? `<div class="event-flyers">${flyers}</div>` : ""}
           <div class="list-info">
             <h3>${ev.name}</h3>
             <p class="list-sub">${ev.date} · ${ev.venue}</p>
@@ -152,6 +193,7 @@ function renderEventos(): string {
   return `
     <h2>Eventos</h2>
     <div class="list-block">${rows}</div>
+    ${renderFeaturedSongs()}
   `;
 }
 
@@ -469,6 +511,19 @@ function renderAdmin(): string {
     )
     .join("");
 
+  const linkRows = featuredSongs
+    .map(
+      (s) => `
+      <tr>
+        <td>${s.id}</td>
+        <td>${s.title}</td>
+        <td><a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.url}</a></td>
+        <td><button data-remove-link="${s.id}">Eliminar</button></td>
+      </tr>
+    `
+    )
+    .join("");
+
   return `
     <h2>Panel de administración</h2>
 
@@ -490,6 +545,19 @@ function renderAdmin(): string {
     <table class="admin-table">
       <thead><tr><th>ID</th><th>Usuario</th><th>Rol</th></tr></thead>
       <tbody>${userRows}</tbody>
+    </table>
+
+    <h3>Agregar canción / link de YouTube</h3>
+    <form id="link-form" class="inline-form">
+      <input name="title" placeholder="Título de la canción" required />
+      <input name="url" type="url" placeholder="https://youtu.be/..." required />
+      <button type="submit">Agregar</button>
+    </form>
+
+    <h3>Canciones destacadas</h3>
+    <table class="admin-table">
+      <thead><tr><th>ID</th><th>Título</th><th>Link</th><th></th></tr></thead>
+      <tbody>${linkRows}</tbody>
     </table>
   `;
 }
@@ -516,6 +584,17 @@ function renderFooter(): string {
       </div>
       <p class="footer-copy">© ${new Date().getFullYear()} Ned's Bayou Records. Todos los derechos reservados.</p>
     </footer>
+  `;
+}
+
+// ---------- LIGHTBOX (agrandar imágenes) ----------
+
+function renderLightbox(): string {
+  if (!state.lightboxImage) return "";
+  return `
+    <div class="lightbox" id="lightbox">
+      <img src="${state.lightboxImage}" alt="Vista ampliada" />
+    </div>
   `;
 }
 
@@ -562,6 +641,7 @@ function render() {
       <main class="content">${renderView()}</main>
     </div>
     ${showFooter ? renderFooter() : ""}
+    ${renderLightbox()}
   `;
   attachEvents();
 }
@@ -569,6 +649,20 @@ function render() {
 // ---------- EVENTOS ----------
 
 function attachEvents() {
+  // Abrir imagen en lightbox
+  app.querySelectorAll<HTMLImageElement>("[data-lightbox]").forEach((img) => {
+    img.addEventListener("click", () => {
+      state.lightboxImage = img.dataset.lightbox ?? null;
+      render();
+    });
+  });
+
+  // Cerrar lightbox (clic en cualquier parte del overlay)
+  app.querySelector("#lightbox")?.addEventListener("click", () => {
+    state.lightboxImage = null;
+    render();
+  });
+
   // Cambiar tema claro/oscuro
   app.querySelector("#theme-toggle")?.addEventListener("click", () => {
     state.theme = state.theme === "light" ? "dark" : "light";
@@ -729,6 +823,27 @@ function attachEvents() {
       image: "",
     });
     render();
+  });
+
+  // Admin: agregar canción/link
+  app.querySelector("#link-form")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const title = (form.elements.namedItem("title") as HTMLInputElement).value.trim();
+    const url = (form.elements.namedItem("url") as HTMLInputElement).value.trim();
+
+    featuredSongs.push({ id: getNextLinkId(), title, url });
+    render();
+  });
+
+  // Admin: eliminar canción/link
+  app.querySelectorAll<HTMLButtonElement>("[data-remove-link]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = Number(btn.dataset.removeLink);
+      const idx = featuredSongs.findIndex((s) => s.id === id);
+      if (idx !== -1) featuredSongs.splice(idx, 1);
+      render();
+    });
   });
 
   // Admin: eliminar suscripción
