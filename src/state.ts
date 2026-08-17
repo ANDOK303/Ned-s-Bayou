@@ -12,6 +12,7 @@ export const state = {
   enrolledCourses: [] as number[],
   rsvpEvents: [] as number[],
   appliedCastings: [] as number[],
+  lightboxImage: null as string | null,
 };
 
 export function isAdmin(): boolean {
